@@ -1,0 +1,13 @@
+[package]
+name = "unveil"
+version = "0.1.0"
+authors = ["António Marques <me@antoniomarques.eu>"]
+description = "Rust bindings for OpenBSD's unveil(2)"
+license = "MIT/Apache-2.0"
+repository = "https://github.com/asmarques/unveil-rs"
+readme = "README.md"
+keywords = ["openbsd", "security"]
+categories = ["api-bindings"]
+
+[dependencies]
+libc = "0.2"
