@@ -1,5 +1,6 @@
 use std::ffi::CString;
 use std::io;
+use std::ptr;
 
 mod ffi {
     use std::os::raw::{c_char, c_int};
@@ -14,7 +15,17 @@ pub fn unveil(path: &str, permissions: &str) -> Result<(), i32> {
     let cpermissions = CString::new(permissions).unwrap();
 
     unsafe {
-        return match ffi::unveil(cpath.as_ptr(), cpermissions.as_ptr()) {
+        let cpath_ptr = if !path.is_empty() {
+            cpath.as_ptr()
+        } else {
+            ptr::null()
+        };
+        let cpermissions_ptr = if !permissions.is_empty() {
+            cpermissions.as_ptr()
+        } else {
+            ptr::null()
+        };
+        return match ffi::unveil(cpath_ptr, cpermissions_ptr) {
             0 => Ok(()),
             _ => Err(io::Error::last_os_error().raw_os_error().unwrap()),
         };

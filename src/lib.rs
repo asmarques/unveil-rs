@@ -27,14 +27,19 @@ mod tests {
     #[test]
     #[cfg(target_os = "openbsd")]
     fn test_unveil() {
-        let result = unveil(".", "r");
-        assert!(result.is_ok())
+        assert!(unveil(".", "r").is_ok());
+    }
+
+    #[test]
+    #[cfg(target_os = "openbsd")]
+    fn test_unveil_restrict() {
+        assert!(unveil("", "").is_ok());
+        assert!(unveil(".", "r").is_err());
     }
 
     #[test]
     #[cfg(not(target_os = "openbsd"))]
     fn test_unveil_not_supported() {
-        let result = unveil(".", "r");
-        assert_eq!(result.unwrap_err(), Error::NotSupported)
+        assert_eq!(unveil(".", "r").unwrap_err(), Error::NotSupported);
     }
 }
