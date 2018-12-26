@@ -11,7 +11,7 @@ pub enum Error {
 
 #[cfg(target_os = "openbsd")]
 pub fn unveil(path: &str, permissions: &str) -> Result<(), Error> {
-    openbsd::unveil(path, permissions).map_err(|code| Error::Os(code))
+    openbsd::unveil(path, permissions).map_err(Error::Os)
 }
 
 #[cfg(not(target_os = "openbsd"))]
