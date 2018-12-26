@@ -25,9 +25,9 @@ pub fn unveil(path: &str, permissions: &str) -> Result<(), i32> {
         } else {
             ptr::null()
         };
-        return match ffi::unveil(cpath_ptr, cpermissions_ptr) {
+        match ffi::unveil(cpath_ptr, cpermissions_ptr) {
             0 => Ok(()),
             _ => Err(io::Error::last_os_error().raw_os_error().unwrap()),
-        };
+        }
     }
 }
