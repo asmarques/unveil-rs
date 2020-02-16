@@ -14,17 +14,19 @@ pub fn unveil(path: &str, permissions: &str) -> Result<(), i32> {
     let cpath = CString::new(path).unwrap();
     let cpermissions = CString::new(permissions).unwrap();
 
+    let cpath_ptr = if !path.is_empty() {
+        cpath.as_ptr()
+    } else {
+        ptr::null()
+    };
+
+    let cpermissions_ptr = if !permissions.is_empty() {
+        cpermissions.as_ptr()
+    } else {
+        ptr::null()
+    };
+
     unsafe {
-        let cpath_ptr = if !path.is_empty() {
-            cpath.as_ptr()
-        } else {
-            ptr::null()
-        };
-        let cpermissions_ptr = if !permissions.is_empty() {
-            cpermissions.as_ptr()
-        } else {
-            ptr::null()
-        };
         match ffi::unveil(cpath_ptr, cpermissions_ptr) {
             0 => Ok(()),
             _ => Err(io::Error::last_os_error().raw_os_error().unwrap()),
