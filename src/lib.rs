@@ -17,7 +17,7 @@ pub fn unveil(path: &str, permissions: &str) -> Result<(), Error> {
 #[cfg(not(target_os = "openbsd"))]
 #[allow(unused_variables)]
 pub fn unveil(path: &str, permissions: &str) -> Result<(), Error> {
-    return Err(Error::NotSupported);
+    Err(Error::NotSupported)
 }
 
 #[cfg(test)]
