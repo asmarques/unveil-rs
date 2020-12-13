@@ -1,5 +1,7 @@
-unveil-rs
-=========
+# unveil-rs
+
+[![Crate](https://img.shields.io/crates/v/unveil.svg)](https://crates.io/crates/unveil)
+[![Documentation](https://docs.rs/unveil/badge.svg)](https://docs.rs/unveil)
 
 Rust binding for OpenBSD's [unveil(2)](https://man.openbsd.org/unveil.2).
 
