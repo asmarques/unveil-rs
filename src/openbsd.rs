@@ -1,4 +1,4 @@
-use std::ffi::CString;
+use std::ffi::CStr;
 use std::io;
 use std::ptr;
 
@@ -10,25 +10,21 @@ mod ffi {
     }
 }
 
-pub fn unveil(path: impl AsRef<[u8]>, permissions: &str) -> Result<(), i32> {
-    let path = path.as_ref();
-    let cpath = CString::new(path).unwrap();
-    let cpermissions = CString::new(permissions).unwrap();
-
-    let cpath_ptr = if !path.is_empty() {
-        cpath.as_ptr()
+pub fn unveil(path: Option<&CStr>, permissions: Option<&CStr>) -> Result<(), i32> {
+    let path = if let Some(path) = path {
+        path.as_ptr()
     } else {
         ptr::null()
     };
 
-    let cpermissions_ptr = if !permissions.is_empty() {
-        cpermissions.as_ptr()
+    let permissions = if let Some(permissions) = permissions {
+        permissions.as_ptr()
     } else {
         ptr::null()
     };
 
     unsafe {
-        match ffi::unveil(cpath_ptr, cpermissions_ptr) {
+        match ffi::unveil(path, permissions) {
             0 => Ok(()),
             _ => Err(io::Error::last_os_error().raw_os_error().unwrap()),
         }
