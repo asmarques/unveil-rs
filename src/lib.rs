@@ -19,14 +19,14 @@ pub fn unveil(path: impl AsRef<[u8]>, permissions: &str) -> Result<(), Error> {
 
     // iff path is empty, pass (NULL, NULL) to lock unveil(2). POSIX
     // doesn’t allow empty pathnames, and unveil(2) assigns no other
-    // meaning to empty path as of OpenBSD 6.6, so this is safe.
+    // meaning to empty path as of OpenBSD 6.8, so this is safe.
     if path.is_empty() {
         return openbsd::unveil(None, None).map_err(Error::Os);
     }
 
     // empty permissions means “deny all operations on path”, which
     // is useful to override an ancestor’s allowed operations. there
-    // is no meaning for (non-NULL, NULL) as of OpenBSD 6.6.
+    // is no meaning for (non-NULL, NULL) as of OpenBSD 6.8.
     let path = CString::new(path).map_err(Error::Path)?;
     let permissions = CString::new(permissions).map_err(Error::Permissions)?;
 
