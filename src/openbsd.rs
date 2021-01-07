@@ -10,7 +10,8 @@ mod ffi {
     }
 }
 
-pub fn unveil(path: &str, permissions: &str) -> Result<(), i32> {
+pub fn unveil(path: impl AsRef<[u8]>, permissions: &str) -> Result<(), i32> {
+    let path = path.as_ref();
     let cpath = CString::new(path).unwrap();
     let cpermissions = CString::new(permissions).unwrap();
 
