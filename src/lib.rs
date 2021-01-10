@@ -3,7 +3,7 @@ extern crate libc;
 #[cfg(target_os = "openbsd")]
 mod openbsd;
 
-use std::ffi::{CString, NulError};
+use std::ffi::NulError;
 
 #[derive(Debug, PartialEq)]
 pub enum Error {
@@ -15,6 +15,8 @@ pub enum Error {
 
 #[cfg(target_os = "openbsd")]
 pub fn unveil(path: impl AsRef<[u8]>, permissions: &str) -> Result<(), Error> {
+    use std::ffi::CString;
+
     let path = path.as_ref();
 
     // iff path is empty, pass (NULL, NULL) to lock unveil(2). POSIX
