@@ -4,6 +4,7 @@ extern crate libc;
 mod openbsd;
 
 use std::ffi::NulError;
+use std::{error, fmt};
 
 #[derive(Debug, PartialEq)]
 pub enum Error {
@@ -12,6 +13,21 @@ pub enum Error {
     Permissions(NulError),
     Os(i32),
 }
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Error::NotSupported => write!(f, "platform is not supported"),
+            Error::Path(_) => write!(f, "unexpected NUL character in path argument"),
+            Error::Permissions(_) => {
+                write!(f, "unexpected NUL character in permissions argument")
+            }
+            Error::Os(errno) => write!(f, "unable to unveil ({})", errno),
+        }
+    }
+}
+
+impl error::Error for Error {}
 
 #[cfg(target_os = "openbsd")]
 pub fn unveil(path: impl AsRef<[u8]>, permissions: &str) -> Result<(), Error> {
