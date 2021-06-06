@@ -53,11 +53,7 @@ mod tests {
     #[test]
     #[cfg(target_os = "openbsd")]
     fn test_unveil() {
-        assert_eq!(
-            unveil(".", "r"),
-            Ok(()),
-            "simple unveil should succeed",
-        );
+        assert_eq!(unveil(".", "r"), Ok(()), "simple unveil should succeed");
 
         // null(4) is a file, and FFh is a valid filename (despite
         // being invalid UTF-8), so this should only throw ENOTDIR
@@ -73,11 +69,7 @@ mod tests {
             "unveil child with empty permissions should succeed",
         );
 
-        assert_eq!(
-            unveil("/dev", "r"),
-            Ok(()),
-            "unveil parent should succeed",
-        );
+        assert_eq!(unveil("/dev", "r"), Ok(()), "unveil parent should succeed");
 
         assert_eq!(
             unveil("", ""),
