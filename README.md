@@ -24,7 +24,9 @@ fn main() {
     File::create(path).unwrap().write_all(contents).unwrap();
 
     // Restrict filesystem view by only allowing read operations on the specified path
-    unveil(path, "r").unwrap();
+    unveil(path, "r")
+    .or_else(unveil::Error::ignore_platform)
+    .unwrap();
 
     // Reading from unveiled paths will succeed
     let mut file = File::open(path).unwrap();
@@ -36,7 +38,9 @@ fn main() {
     assert!(File::open("/etc/passwd").is_err());
 
     // Disable further calls to unveil
-    unveil("", "").unwrap();
+    unveil("", "")
+    .or_else(unveil::Error::ignore_platform)
+    .unwrap();
 
     // All calls to unveil will now fail
     assert!(unveil(path, "rw").is_err());
