@@ -1,6 +1,6 @@
 [package]
 name = "unveil"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["António Marques <me@antoniomarques.eu>"]
 description = "Rust binding for OpenBSD's unveil(2)"
 license = "MIT/Apache-2.0"
